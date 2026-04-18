@@ -1,0 +1,107 @@
+# Default values for fast-api-webapp.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+image:
+  repository: ghcr.io/cristtori/liberando-productos-practica-final
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "1.0.2"
+# imagePullSecrets created to use Docker Hub Private Account
+imagePullSecrets: {}
+# -- imageCredentials for DockerHub private account
+imageCredentials:
+  ## -- DockerHub registry URL
+  registry: ""
+  ## -- DockerHub account's username
+  username: ""
+  ## -- DockerHub account's token (only read permissions)
+  password: ""
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+podAnnotations: {}
+podSecurityContext: {}
+# fsGroup: 2000
+
+securityContext: {}
+# capabilities:
+#   drop:
+#   - ALL
+# readOnlyRootFilesystem: true
+# runAsNonRoot: true
+# runAsUser: 1000
+
+## -- Metrics configuration of the application to deploy
+metrics:
+  # -- Indicates whether this app will expose metrics
+  enabled: true
+  # -- Service configuration used for metrics
+  svc:
+    # -- Service port number used for metrics
+    port: 8000
+    # -- Service port name used for metrics
+    name: metrics
+# -- Service configuration
+service:
+  # -- Service Type
+  type: ClusterIP
+  # -- Service number for the webapp
+  port: 8081
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+# -- Resources configuration for the deployment
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 70
+nodeSelector: {}
+tolerations: []
+affinity: {}
+config:
+  mongoService: mongodb
+mongodb:
+  # -- Indicate whether MongoDB will be enabled or not
+  enabled: true
+  # -- Number of members of MongoDB replicaset
+  members: 3
+  # -- MongoDB version
+  version: "5.0.6"
+  # -- MongoDB Admin User
+  adminUser: "my-user"
+  # -- MongoDB user
+  user: "my-user-fast-api"
+  # -- MongoDB password
+  password: "password"
+  # -- Metrics configuration
+  metrics:
+    # -- Indicate wheter the metrics will be configured or not
+    enabled: true
