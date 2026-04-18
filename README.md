@@ -553,3 +553,10 @@ Y cuando el consumo baja o el HPA escala los pods, llega automáticamente la rec
 [RESOLVED] Monitoring Event Notification
 Alert: fastApiCPURequestAlert - `critical`
 ```
+---
+
+## Resultado final
+
+A continuación se muestra el dashboard de Grafana con las métricas de la aplicación junto a las alertas recibidas en el canal de Slack:
+
+![Dashboard de Grafana y alertas en Slack](docs/images/dashboard-stress.png)
