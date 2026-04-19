@@ -1,5 +1,15 @@
 # Liberando Productos - Práctica Final
 
+## Descripción
+
+Esta práctica trata sobre el despliegue de una aplicación FastAPI a la que se le añade un nuevo endpoint `/bye`, se ejecutan tests unitarios y se realiza un pipeline de CI/CD con GitHub Actions que publica automáticamente la imagen Docker en GHCR y DockerHub usando Semantic Release para el versionado automático.
+
+La aplicación se despliega en Kubernetes mediante un Helm chart en Minikube, junto con un stack completo de monitorización formado por Prometheus, AlertManager y Grafana. Prometheus recoge las métricas de los endpoints de la aplicación, AlertManager envía alertas a un canal de Slack cuando se superan los límites configurados, y Grafana permite visualizar en tiempo real el número de llamadas a cada endpoint y el consumo de recursos.
+
+Para comprobar que todo funciona correctamente se realiza una prueba de estrés dentro del contenedor que eleva el consumo de CPU por encima del límite configurado, lo que dispara una alerta `critical` en Slack. Cuando el HPA escala los pods y el consumo baja, AlertManager envía automáticamente la notificación de recuperación.
+
+A partir del **punto 7** es posible reproducir el despliegue completo descargando este repositorio. La versión **1.0.2** es la que actualmente pasa todos los tests y está publicada. Siguiendo los pasos desde el punto 7 en adelante, y añadiendo el **Webhook y canal de Slack propios** (el mío se envía personalmente al instructor), se puede reproducir todo el entorno.
+
 ## Índice
 
 1. [Creación del nuevo endpoint](#1-creación-del-nuevo-endpoint)
@@ -73,8 +83,9 @@ src/tests/app_test.py::TestSimpleServer::read_bye_test PASSED
 TOTAL   52   4   92%
 ```
 
-### 2.2 Creo el repo en mi GitHub y subo el local con un commit inicial
+### 2.2 Creo el repo en mi GitHub y subo el local con un commit inicial y compruebo que el pipeline de testing se ejecuta correctamente en GitHub Actions
 
+![Pipeline de testing en GitHub Actions](docs/images/unit-test.png)
 ---
 
 ## 3. Creación pipelines CI/CD (GitHub Actions)
@@ -251,6 +262,10 @@ La convención de commits que utiliza Semantic Release es la siguiente:
 | `fix:` | Sube el PATCH → `v1.0.1` |
 | `feat:` | Sube el MINOR → `v1.1.0` |
 | `feat!:` | Sube el MAJOR → `v2.0.0` |
+
+### 4.5 Compruebo que el pipeline de release se ejecuta correctamente en GitHub Actions y que sea crea la versión.
+
+![Pipeline de release con Semantic Release en GitHub Actions](docs/images/build-release.png)
 
 ---
 
